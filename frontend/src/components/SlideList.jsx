@@ -1,9 +1,14 @@
 import React from "react";
 
-function SlideCard({ slide, onSelect }) {
+function SlideCard({ slide, onSelect, selected }) {
   return (
-    <div onClick={() => onSelect(slide.slide_id)} className="slide-item">
-      <div className="h-28 w-40 bg-black/40 flex items-center justify-center text-sm small-muted rounded">
+    <div
+      onClick={() => onSelect(slide.slide_id)}
+      className={`${
+        selected === slide.slide_id ? "slide-item-active" : "slide-item"
+      }`}
+    >
+      <div className="h-28 w-full bg-black/40 flex items-center justify-center text-sm small-muted rounded">
         Thumbnail
       </div>
       <div className="mt-2 text-sm small-muted">Slide {slide.slide_id}</div>
@@ -11,13 +16,18 @@ function SlideCard({ slide, onSelect }) {
   );
 }
 
-export default function SlideList({ slides = [], onSelect }) {
+export default function SlideList({ slides = [], onSelect, selected }) {
   return (
-    <div className="space-y-3">
-      <div className="text-sm small-muted">Slides</div>
+    <div className="card">
+      <div className="section-title">Slides</div>
       <div className="grid grid-cols-3 gap-3">
         {slides.map((s) => (
-          <SlideCard key={s.slide_id} slide={s} onSelect={onSelect} />
+          <SlideCard
+            key={s.slide_id}
+            slide={s}
+            onSelect={onSelect}
+            selected={selected}
+          />
         ))}
       </div>
     </div>

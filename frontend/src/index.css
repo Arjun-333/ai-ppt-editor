@@ -4,11 +4,10 @@
 
 :root {
   --bg: #000;
-  --surface: rgba(255, 255, 255, 0.04);
-  --surface-2: rgba(255, 255, 255, 0.06);
-  --border: rgba(255, 255, 255, 0.08);
+  --surface: rgba(255, 255, 255, 0.06);
+  --surface-2: rgba(255, 255, 255, 0.08);
+  --border: rgba(255, 255, 255, 0.12);
   --muted: #b8b8b8;
-  --soft: #d7d5d5;
   --accent: #a78989;
   --accent-dark: #5c4e4e;
   --radius: 14px;
@@ -35,7 +34,6 @@ body {
   letter-spacing: 0.02em;
   margin-bottom: 0.75rem;
 }
-
 .small-muted {
   color: var(--muted);
   opacity: 0.9;
@@ -47,9 +45,8 @@ body {
   border-radius: var(--radius);
   backdrop-filter: blur(14px);
   padding: 1.4rem;
-  box-shadow: 0 4px 22px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.35);
 }
-
 .card:hover {
   background: var(--surface-2);
   transform: translateY(-2px);
@@ -59,10 +56,7 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding-left: 1.25rem;
-  padding-right: 1.25rem;
-  padding-top: 0.625rem;
-  padding-bottom: 0.625rem;
+  padding: 0.625rem 1.25rem;
   font-size: 0.9375rem;
   font-weight: 600;
   border-radius: 0.75rem;
@@ -70,12 +64,10 @@ body {
   color: #fff;
   box-shadow: 0 0 22px rgba(168, 137, 137, 0.35);
 }
-
 .btn-brand:hover {
   background: linear-gradient(135deg, var(--accent-dark), var(--accent));
   box-shadow: 0 0 30px rgba(168, 137, 137, 0.45);
 }
-
 .btn-disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -95,7 +87,6 @@ body {
   cursor: pointer;
   background: rgba(255, 255, 255, 0.03);
 }
-
 .upload-zone:hover {
   border-color: var(--accent);
   background: rgba(255, 255, 255, 0.05);
@@ -109,12 +100,10 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.07);
   background: rgba(255, 255, 255, 0.03);
 }
-
 .slide-item:hover {
   border-color: var(--accent);
   background: rgba(255, 255, 255, 0.06);
 }
-
 .slide-item-active {
   border-color: var(--accent-dark);
   background: rgba(255, 255, 255, 0.09);
@@ -127,7 +116,6 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(10px);
 }
-
 .editor-input {
   width: 100%;
   padding: 0.75rem 1rem;
@@ -136,7 +124,6 @@ body {
   color: #e6e6e6;
   border: 1px solid rgba(255, 255, 255, 0.06);
 }
-
 .editor-input:focus {
   border-color: var(--accent);
   outline: none;
@@ -147,12 +134,11 @@ body {
     padding: 1rem;
   }
 }
-
 @media (max-width: 768px) {
   .card {
     padding: 1rem;
   }
-  .max-w-6xl {
+  .max-w-7xl {
     padding: 0 1rem;
   }
 }

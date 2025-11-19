@@ -12,6 +12,17 @@ app = FastAPI()
 UPLOAD_DIR = "tmp_uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # you can restrict later
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
 @app.get("/debug")
 async def debug(file_id: str):
     path = os.path.join(UPLOAD_DIR, f"{file_id}.pptx")

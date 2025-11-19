@@ -2,7 +2,7 @@ import React from "react";
 
 export default function FileUploader({ file, setFile, onUpload, uploading }) {
   return (
-    <div className="card p-6 rounded-2xl shadow-xl">
+    <div className="card">
       <div className="text-xl font-semibold mb-2">Upload PPTX</div>
       <div className="small-muted text-sm mb-4">
         Supported: .pptx (Max ~20 MB)
@@ -15,9 +15,9 @@ export default function FileUploader({ file, setFile, onUpload, uploading }) {
           className="hidden"
           onChange={(e) => setFile(e.target.files[0])}
         />
-        <div className="flex-1 py-3 px-4 border border-white/6 rounded cursor-pointer bg-black/20">
+        <div className="flex-1 py-3 px-4 border border-white/6 rounded cursor-pointer bg-black/20 upload-zone">
           {file ? (
-            <div className="flex justify-between items-center">
+            <div className="w-full flex justify-between items-center">
               <div>
                 <div className="font-medium">{file.name}</div>
                 <div className="text-xs small-muted">
@@ -34,9 +34,7 @@ export default function FileUploader({ file, setFile, onUpload, uploading }) {
 
       <button
         onClick={onUpload}
-        className={`btn-brand mt-4 w-full py-2 rounded-lg font-medium ${
-          uploading ? "btn-disabled" : ""
-        }`}
+        className={`btn-brand mt-4 w-full ${uploading ? "btn-disabled" : ""}`}
         disabled={uploading}
       >
         {uploading ? "Uploading…" : "Upload & Parse"}

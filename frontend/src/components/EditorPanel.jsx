@@ -23,7 +23,7 @@ export default function EditorPanel({
         />
         <button
           onClick={() => onApplyInstruction(instruction)}
-          className="btn-brand mt-3 w-full py-2 rounded"
+          className="btn-brand mt-3 w-full"
         >
           Apply AI Instruction
         </button>
@@ -52,7 +52,7 @@ function ElementEditor({ element, onApply }) {
       <textarea
         value={val}
         onChange={(e) => setVal(e.target.value)}
-        className="w-full p-2 bg-black/0 rounded"
+        className="w-full p-2 bg-transparent rounded"
         rows="2"
       />
       <button
