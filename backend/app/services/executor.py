@@ -1,42 +1,56 @@
-# executor.py
 from pptx import Presentation
 from typing import Dict
 
 def apply_edit_plan(pptx_path: str, edit_plan: Dict, out_path: str):
     prs = Presentation(pptx_path)
 
-    # map element ids to shapes (simple approach)
     for slide_edit in edit_plan.get("edits", []):
         slide_index = slide_edit["slide_id"] - 1
         slide = prs.slides[slide_index]
-        # build a list of shapes with generated ids matching parser convention
-        shapes = list(slide.shapes)
+
+        # Match executor shapes exactly with parser
+        filtered_shapes = [
+            shape for shape in slide.shapes 
+            if hasattr(shape, "text_frame") and shape.text_frame is not None
+        ]
+
         for action in slide_edit["actions"]:
+
             if action["type"] == "replace_text":
-                eid = action["element_id"]  # e.g., 's1_sh1'
-                # extract shape index
+                element_id = action["element_id"]
+                new_text = action["new_text"]
+
                 try:
-                    parts = eid.split("_sh")
-                    s_idx = int(parts[1]) - 1
-                    shape = shapes[s_idx]
-                    if shape.has_text_frame:
-                        shape.text = action["new_text"]
+                    shape_index = int(element_id.split("_sh")[1]) - 1
+                    shape = filtered_shapes[shape_index]
+                    tf = shape.text_frame
+
+                    # --- 🔥 PROPER FORMATTING PRESERVE START ---
+                    if tf.paragraphs and tf.paragraphs[0].runs:
+                        # Use the first existing run's formatting
+                        first_run = tf.paragraphs[0].runs[0]
+                        font = first_run.font
+
+                        # Clear text, keep run
+                        first_run.text = new_text
+
+                        # Reapply preserved formatting
+                        first_run.font.size = font.size
+                        first_run.font.bold = font.bold
+                        first_run.font.italic = font.italic
+                        first_run.font.color.rgb = font.color.rgb
+                        first_run.font.name = font.name
+
+                    else:
+                        # Fallback if no run exists
+                        shape.text = new_text
+                    # --- 🔥 PROPER FORMATTING PRESERVE END ---
+
+                    print(f"[OK] replaced text for {element_id}")
+
                 except Exception as e:
-                    print("replace_text failed", e)
-            elif action["type"] == "replace_image":
-                # find image by id mapping — simplified: replace first picture
-                for shape in slide.shapes:
-                    try:
-                        if shape.shape_type == 13 or getattr(shape, "image", None):
-                            # replace with new image path
-                            image_path = action["upload_path"]
-                            left, top, width, height = shape.left, shape.top, shape.width, shape.height
-                            # remove existing shape: python-pptx has no remove, hack: recreate slide without that shape OR overlay new picture
-                            slide.shapes.add_picture(image_path, left, top, width, height)
-                            break
-                    except Exception as e:
-                        print("replace_image failed", e)
-            # add other action handlers...
+                    print(f"[ERROR] failed replacing text for {element_id}: {e}")
 
     prs.save(out_path)
+    print("[SAVED]", out_path)
     return out_path

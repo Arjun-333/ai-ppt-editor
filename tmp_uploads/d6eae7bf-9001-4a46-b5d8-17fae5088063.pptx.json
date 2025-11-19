@@ -1,0 +1,25 @@
+{
+  "meta": {
+    "title": "",
+    "slide_count": 1
+  },
+  "slides": [
+    {
+      "slide_id": 1,
+      "layout": "Title Slide",
+      "elements": [
+        {
+          "id": "s1_sh1",
+          "type": "text",
+          "text": "Original Title"
+        },
+        {
+          "id": "s1_sh2",
+          "type": "text",
+          "text": "Subtitle text here"
+        }
+      ],
+      "images": []
+    }
+  ]
+}
