@@ -8,18 +8,18 @@ export default function EditorPanel({
   const [instruction, setInstruction] = useState("");
 
   return (
-    <div className="card p-6 rounded-2xl">
-      <h3 className="text-xl font-semibold mb-3">
+    <div className="editor-panel">
+      <div className="text-xl font-semibold mb-3">
         Slide {slide?.slide_id ?? "-"}
-      </h3>
+      </div>
 
       <div className="mb-4">
         <textarea
           rows="3"
           value={instruction}
           onChange={(e) => setInstruction(e.target.value)}
-          placeholder="Write a natural instruction (e.g. Make this slide more professional)"
-          className="w-full bg-black/0 border border-white/6 p-3 rounded"
+          placeholder="Write a natural instruction"
+          className="editor-input"
         />
         <button
           onClick={() => onApplyInstruction(instruction)}
@@ -30,7 +30,7 @@ export default function EditorPanel({
       </div>
 
       <div>
-        <h4 className="text-sm small-muted mb-2">Manual edits</h4>
+        <div className="text-sm small-muted mb-2">Manual edits</div>
         {slide?.elements?.map((el) => (
           <ElementEditor
             key={el.id}

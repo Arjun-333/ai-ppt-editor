@@ -3,8 +3,10 @@ import React from "react";
 export default function FileUploader({ file, setFile, onUpload, uploading }) {
   return (
     <div className="card p-6 rounded-2xl shadow-xl">
-      <h3 className="text-xl font-semibold mb-2">Upload PPTX</h3>
-      <p className="small-muted text-sm mb-4">Supported: .pptx (Max ~20 MB)</p>
+      <div className="text-xl font-semibold mb-2">Upload PPTX</div>
+      <div className="small-muted text-sm mb-4">
+        Supported: .pptx (Max ~20 MB)
+      </div>
 
       <label className="w-full flex items-center gap-4">
         <input
@@ -19,7 +21,7 @@ export default function FileUploader({ file, setFile, onUpload, uploading }) {
               <div>
                 <div className="font-medium">{file.name}</div>
                 <div className="text-xs small-muted">
-                  {(file.size / 1024) | 0} KB
+                  {Math.round(file.size / 1024)} KB
                 </div>
               </div>
               <div className="text-sm small-muted">Change</div>
@@ -32,7 +34,9 @@ export default function FileUploader({ file, setFile, onUpload, uploading }) {
 
       <button
         onClick={onUpload}
-        className="btn-brand mt-4 w-full py-2 rounded-lg font-medium"
+        className={`btn-brand mt-4 w-full py-2 rounded-lg font-medium ${
+          uploading ? "btn-disabled" : ""
+        }`}
         disabled={uploading}
       >
         {uploading ? "Uploading…" : "Upload & Parse"}
