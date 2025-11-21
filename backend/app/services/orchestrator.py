@@ -37,11 +37,23 @@ def get_edit_plan_from_gemini(extracted_json: dict, user_instruction: str) -> di
     client = genai.Client(api_key=api_key)
 
     system_instruction = (
-    "You can now also STYLE text using the 'style_text' action type. "
-    "Supported styles: font_size (pt), font_color (hex), bold (bool), italic (bool)."
-    "You can also CREATE new slides using 'create_slide'. "
-    "Provide a 'title' and a list of 'content' strings (bullet points)."
-)
+        "You are an AI PowerPoint structural editor. "
+        "You will ONLY produce JSON that matches the schema provided. "
+        "DO NOT target group shapes, decorative shapes, or empty shapes. "
+        "ONLY modify elements that appear in the provided PPT structure JSON. "
+        "The PPT structure already contains only editable text and images. "
+        "Your output MUST reference exact element_id values from that structure. "
+        "You can now also STYLE text using the 'style_text' action type. "
+        "Supported styles: font_size (pt), font_color (hex), bold (bool), italic (bool). "
+        "You can also CREATE new slides using 'create_slide'. "
+        "Provide a 'title' and a list of 'content' strings (bullet points)."
+    )
+    
+    prompt = (
+        f"PPT Structure:\n{json.dumps(extracted_json, indent=2)}\n\n"
+        f"User Request:\n{user_instruction}\n\n"
+        "Now generate the JSON edit plan."
+    )
     
     print(f"[DEBUG] Sending prompt to Gemini: {user_instruction}")
 

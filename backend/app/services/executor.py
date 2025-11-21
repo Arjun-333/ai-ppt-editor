@@ -105,18 +105,30 @@ def apply_edit_plan(pptx_path: str, edit_plan: Dict, out_path: str):
                                     run.font.size = Pt(action["font_size"])
                                 
                                 if action.get("font_color"):
-                                    # Expect hex string like "#FF0000" or "FF0000"
-                                    hex_color = action["font_color"].lstrip("#")
+                                    raw_color = action["font_color"]
+                                    COLOR_MAP = {
+                                        "black": "000000", "white": "FFFFFF", "red": "FF0000",
+                                        "green": "00FF00", "blue": "0000FF", "yellow": "FFFF00",
+                                        "purple": "800080", "orange": "FFA500", "gray": "808080",
+                                        "grey": "808080", "pink": "FFC0CB", "brown": "A52A2A"
+                                    }
+                                    
+                                    if raw_color.lower() in COLOR_MAP:
+                                        hex_color = COLOR_MAP[raw_color.lower()]
+                                    else:
+                                        hex_color = raw_color.lstrip("#")
+
                                     if len(hex_color) == 6:
-                                        run.font.color.rgb = RGBColor.from_string(hex_color)
+                                        try:
+                                            run.font.color.rgb = RGBColor.from_string(hex_color)
+                                        except ValueError:
+                                            print(f"[WARN] Invalid hex color: {hex_color}")
                                         
                                 if action.get("bold") is not None:
                                     run.font.bold = action["bold"]
                                     
                                 if action.get("italic") is not None:
                                     run.font.italic = action["italic"]
-
-                        print(f"[OK] styled text for {element_id}")
 
                     except Exception as e:
                         print(f"[ERROR] failed styling text for {element_id}: {e}")

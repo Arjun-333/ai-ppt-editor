@@ -61,10 +61,15 @@ async def edit_pptx(file_id: str = Form(...), instruction: str = Form(...)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Schema error: {e}")
 
-    apply_edit_plan(orig_path, edit_plan, out_path)
-    
-    # Re-extract structure of the EDITED file so frontend can update
-    new_structure = extract_pptx_structure(out_path)
+    try:
+        apply_edit_plan(orig_path, edit_plan, out_path)
+        
+        # Re-extract structure of the EDITED file so frontend can update
+        new_structure = extract_pptx_structure(out_path)
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Execution error: {e}")
 
     return {
         "file_id": file_id, 
