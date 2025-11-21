@@ -29,7 +29,13 @@ class StyleTextAction(BaseModel):
     bold: Optional[bool] = None
     italic: Optional[bool] = None
 
-Action = ReplaceTextAction | AddTextAction | ReplaceImageAction | ChangeLayoutAction | StyleTextAction
+class CreateSlideAction(BaseModel):
+    type: Literal["create_slide"]
+    title: str
+    content: List[str] = Field(default_factory=list) # Bullet points
+    layout_idx: int = 1 # Default to Title and Content
+
+Action = ReplaceTextAction | AddTextAction | ReplaceImageAction | ChangeLayoutAction | StyleTextAction | CreateSlideAction
 
 class SlideEdit(BaseModel):
     slide_id: int

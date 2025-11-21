@@ -14,7 +14,10 @@ def get_edit_plan_from_gemini(extracted_json: dict, user_instruction: str) -> di
     """
 
     # If no API key → return mock JSON plan for testing
-    if not os.getenv("GEMINI_API_KEY"):
+    api_key = os.getenv("GEMINI_API_KEY")
+    print(f"[DEBUG] API Key present: {bool(api_key)}")
+    
+    if not api_key:
         print("⚠️  GEMINI_API_KEY not found — using mock edit plan.")
         return {
             "edits": [
@@ -31,26 +34,16 @@ def get_edit_plan_from_gemini(extracted_json: dict, user_instruction: str) -> di
             ]
         }
 
-    client = genai.Client()
+    client = genai.Client(api_key=api_key)
 
     system_instruction = (
-    "You are an AI PowerPoint structural editor. "
-    "You will ONLY produce JSON that matches the schema provided. "
-    "DO NOT target group shapes, decorative shapes, or empty shapes. "
-    "ONLY modify elements that appear in the provided PPT structure JSON. "
-    "The PPT structure already contains only editable text and images. "
-    "Your output MUST reference exact element_id values from that structure. "
-    "Do NOT invent element IDs."
     "You can now also STYLE text using the 'style_text' action type. "
     "Supported styles: font_size (pt), font_color (hex), bold (bool), italic (bool)."
+    "You can also CREATE new slides using 'create_slide'. "
+    "Provide a 'title' and a list of 'content' strings (bullet points)."
 )
-
-
-    prompt = (
-        f"PPT Structure:\n{json.dumps(extracted_json, indent=2)}\n\n"
-        f"User Request:\n{user_instruction}\n\n"
-        "Now generate the JSON edit plan."
-    )
+    
+    print(f"[DEBUG] Sending prompt to Gemini: {user_instruction}")
 
     try:
         response = client.models.generate_content(
@@ -61,6 +54,8 @@ def get_edit_plan_from_gemini(extracted_json: dict, user_instruction: str) -> di
                 "response_json_schema": EditPlan.model_json_schema(),
             },
         )
+        
+        print(f"[DEBUG] Gemini Raw Response: {response.text}")
 
         # Validate & return JSON
         validated = EditPlan.model_validate_json(response.text)
@@ -68,4 +63,6 @@ def get_edit_plan_from_gemini(extracted_json: dict, user_instruction: str) -> di
 
     except Exception as e:
         print("❌ Gemini error:", e)
+        import traceback
+        traceback.print_exc()
         return None

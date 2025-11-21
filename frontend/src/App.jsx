@@ -50,6 +50,10 @@ export default function App() {
       if (res.download) {
         setDownloadUrl(getDownloadLink(res.download));
       }
+      if (res.structure) {
+        setStructure(res.structure);
+        setSlides(res.structure.slides || []);
+      }
       toast.success("AI edit applied successfully!", { id: loadingToast });
     } catch (err) {
       console.error(err);
@@ -80,6 +84,10 @@ export default function App() {
       const res = await editFile(fileId, `__APPLY_PLAN__::${planInstr}`);
       if (res.download) {
         setDownloadUrl(getDownloadLink(res.download));
+      }
+      if (res.structure) {
+        setStructure(res.structure);
+        setSlides(res.structure.slides || []);
       }
       toast.success("Manual edit applied!", { id: loadingToast });
     } catch (err) {

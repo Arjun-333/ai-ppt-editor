@@ -62,8 +62,16 @@ async def edit_pptx(file_id: str = Form(...), instruction: str = Form(...)):
         raise HTTPException(status_code=500, detail=f"Schema error: {e}")
 
     apply_edit_plan(orig_path, edit_plan, out_path)
+    
+    # Re-extract structure of the EDITED file so frontend can update
+    new_structure = extract_pptx_structure(out_path)
 
-    return {"file_id": file_id, "download": f"/download?file_id={file_id}", "plan_executed": edit_plan}
+    return {
+        "file_id": file_id, 
+        "download": f"/download?file_id={file_id}", 
+        "plan_executed": edit_plan,
+        "structure": new_structure
+    }
 
 @router.get("/download")
 async def download(file_id: str):
