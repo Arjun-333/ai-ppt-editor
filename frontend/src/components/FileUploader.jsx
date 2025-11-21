@@ -1,44 +1,47 @@
 import React from "react";
+import { Button } from "./ui/Button";
+import { UploadCloud, File as FileIcon, X } from "lucide-react";
+import { cn } from "../lib/utils";
 
 export default function FileUploader({ file, setFile, onUpload, uploading }) {
-  return (
-    <div className="card">
-      <div className="text-xl font-semibold mb-2">Upload PPTX</div>
-      <div className="small-muted text-sm mb-4">
-        Supported: .pptx (Max ~20 MB)
-      </div>
-
-      <label className="w-full flex items-center gap-4">
-        <input
-          type="file"
-          accept=".pptx"
-          className="hidden"
-          onChange={(e) => setFile(e.target.files[0])}
-        />
-        <div className="flex-1 py-3 px-4 border border-white/6 rounded cursor-pointer bg-black/20 upload-zone">
-          {file ? (
-            <div className="w-full flex justify-between items-center">
-              <div>
-                <div className="font-medium">{file.name}</div>
-                <div className="text-xs small-muted">
-                  {Math.round(file.size / 1024)} KB
-                </div>
-              </div>
-              <div className="text-sm small-muted">Change</div>
-            </div>
-          ) : (
-            <div className="text-sm small-muted">Click to choose a file</div>
-          )}
+  if (file) {
+    return (
+      <div className="p-3 border border-border rounded-lg bg-background">
+        <div className="flex items-center gap-3 mb-3">
+          <div className="p-2 bg-primary/10 rounded-md">
+            <FileIcon className="w-5 h-5 text-primary" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-medium truncate" title={file.name}>{file.name}</div>
+            <div className="text-xs text-muted-foreground">{Math.round(file.size / 1024)} KB</div>
+          </div>
+          <button onClick={() => setFile(null)} className="text-muted-foreground hover:text-destructive">
+            <X className="w-4 h-4" />
+          </button>
         </div>
-      </label>
+        <Button
+          onClick={onUpload}
+          className="w-full"
+          disabled={uploading}
+          isLoading={uploading}
+          size="sm"
+        >
+          {uploading ? "Uploading..." : "Parse File"}
+        </Button>
+      </div>
+    );
+  }
 
-      <button
-        onClick={onUpload}
-        className={`btn-brand mt-4 w-full ${uploading ? "btn-disabled" : ""}`}
-        disabled={uploading}
-      >
-        {uploading ? "Uploading…" : "Upload & Parse"}
-      </button>
-    </div>
+  return (
+    <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed rounded-lg cursor-pointer hover:bg-accent/50 transition-colors border-muted-foreground/25 group">
+      <input
+        type="file"
+        accept=".pptx"
+        className="hidden"
+        onChange={(e) => setFile(e.target.files[0])}
+      />
+      <UploadCloud className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors mb-2" />
+      <span className="text-xs font-medium text-muted-foreground group-hover:text-foreground">Click to upload PPTX</span>
+    </label>
   );
 }

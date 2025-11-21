@@ -41,6 +41,8 @@ def get_edit_plan_from_gemini(extracted_json: dict, user_instruction: str) -> di
     "The PPT structure already contains only editable text and images. "
     "Your output MUST reference exact element_id values from that structure. "
     "Do NOT invent element IDs."
+    "You can now also STYLE text using the 'style_text' action type. "
+    "Supported styles: font_size (pt), font_color (hex), bold (bool), italic (bool)."
 )
 
 

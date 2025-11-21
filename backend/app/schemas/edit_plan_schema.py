@@ -21,7 +21,15 @@ class ChangeLayoutAction(BaseModel):
     type: Literal["change_layout"]
     layout_id: str
 
-Action = ReplaceTextAction | AddTextAction | ReplaceImageAction | ChangeLayoutAction
+class StyleTextAction(BaseModel):
+    type: Literal["style_text"]
+    element_id: str
+    font_size: Optional[int] = None
+    font_color: Optional[str] = None  # Hex code e.g. "#FF0000"
+    bold: Optional[bool] = None
+    italic: Optional[bool] = None
+
+Action = ReplaceTextAction | AddTextAction | ReplaceImageAction | ChangeLayoutAction | StyleTextAction
 
 class SlideEdit(BaseModel):
     slide_id: int
